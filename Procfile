@@ -1,1 +1,2 @@
-worker node index.js
+worker: node index.js
+heroku scale worker=1
