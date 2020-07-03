@@ -1,9 +1,9 @@
 const Discord = require('discord.js');
 const client = new Discord.Client();
 
-const prefix = '$';
+const prefix = '-';
 const none = '';
-const weird = '&';
+const weird = '-';
 
 client.once('ready', () =>{
     console.log('Mesa is here!');
