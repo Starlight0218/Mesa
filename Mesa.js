@@ -1,6 +1,10 @@
 const Discord = require('discord.js');
 const client = new Discord.Client();
 
+
+
+client.login('NTIwNzg5MjA0NjU4MDI4NTU1.Xvus2Q.wrMwBraNoxe-Nin-JyDd1JNSR6M');
+
 const prefix = '-';
 const none = '';
 const weird = '-';
@@ -76,4 +80,3 @@ client.on('message', message=>{
 })
 
 
-client.login('NTIwNzg5MjA0NjU4MDI4NTU1.Xvus2Q.wrMwBraNoxe-Nin-JyDd1JNSR6M');
