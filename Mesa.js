@@ -1,13 +1,14 @@
 const Discord = require('discord.js');
 const client = new Discord.Client();
 
+const { token } = require('./config.json');
 
-
-client.login('NTIwNzg5MjA0NjU4MDI4NTU1.Xvus2Q.wrMwBraNoxe-Nin-JyDd1JNSR6M');
+client.login(token);
 
 const prefix = '-';
 const none = '';
 const weird = '-';
+const Weird2 = '+';
 
 client.once('ready', () =>{
     console.log('Mesa is here!');
@@ -21,11 +22,11 @@ client.on('message', message =>{
     const command = args.shift().toLocaleLowerCase();
 
     if(command === 'context'){
-        message.channel.send('FOR MOTHER RUSSIA!!!!');
+        message.channel.send('Insert here');
     }else if(command == 'version'){
             message.channel.send('I am in version 1.0.0');
     }else if(command == 'commands'){
-        message.channel.send('Good commands are $Info version, $Context, $clear (number of messages), Replies; hi, and Hi, The ones I hate; &EatMe bio, and &EatMe data(still working on it). ')
+        message.channel.send('Good commands are $Info version, $Context, $clear (number of messages), Replies; hi, and Hi.')
     }
         
     
@@ -65,18 +66,18 @@ client.on('message', message=>{
 
 
 
-
-client.on('message', message=>{
-    let eat = message.content.substring(weird.length).split(" ");
-    switch(eat[0]){ 
-        case 'EatMe':
-            if(eat[1] === 'bio'){
-                message.channel.send('I enjoy having my flesh torn from my body with blood and bone being revealed and then watching as its consumed while asking how it tastes. I will then proceed to scream from the pain and ask you to eat the rest of me so I can die in painful bliss.');
-            }else{
-                message.channel.send('Eat Me has multiple diffrent commands, Please be more specific! Also Do not do this ever again')
-            }
-            break;
-    }
-})
-
-
+// /*
+// This is all a bet that i lost twords michael and a promis i made, i hate it, and i'll have to keep this in due to his request!
+// */
+// client.on('message', message=>{
+//     let eat = message.content.substring(weird.length).split(" ");
+//     switch(eat[0]){ 
+//         case 'EatMe':
+//             if(eat[1] === 'bio'){
+//                 message.channel.send('I enjoy having my flesh torn from my body with blood and bone being revealed and then watching as its consumed while asking how it tastes. I will then proceed to scream from the pain and ask you to eat the rest of me so I can die in painful bliss.');
+//             }else{
+//                 message.channel.send('Eat Me has multiple diffrent commands, Please be more specific! Also Do not do this ever again')
+//             }
+//             break;
+//     }
+// })
