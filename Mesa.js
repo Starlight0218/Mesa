@@ -1,6 +1,6 @@
 // Import necessary modules and constants
 const commandHandler = require('./commands/commandHandler.js');
-const { Client, GatewayIntentBits } = require('discord.js');
+const { Client, GatewayIntentBits, PermissionsBitField } = require('discord.js');
 const consts = require('./allConst.js');
 
 // Create a new Discord client with necessary intents
@@ -36,9 +36,26 @@ client.on('messageCreate', async (message) => {
 
             // Basic command handling
             if (command === 'context') {
-                await message.channel.send('Test');
+                await message.channel.send('This discord bot is just a fun one with more commands soon.');
             } else if (command === 'version') {
                 await message.channel.send(consts.VERSION);
+            } else if (command === 'clear') {
+                // Handle clear command
+                if (!message.member.permissions.has(PermissionsBitField.Flags.ManageMessages)) {
+                    return message.reply('You do not have permission to use this command.');
+                }
+
+                const amount = parseInt(args[0], 10);
+                if (!amount || amount <= 0 || amount > 100) {
+                    return message.reply('Please specify a number between 1 and 100.');
+                }
+
+                await message.channel.bulkDelete(amount, true).catch(err => {
+                    console.error(err);
+                    message.channel.send('An error occurred while trying to clear messages.');
+                });
+
+                await message.channel.send(`Successfully deleted ${amount} messages.`);
             } else {
                 // Pass to external command handler
                 commandHandler(message);
