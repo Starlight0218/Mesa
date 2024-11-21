@@ -10,7 +10,8 @@ const prefix = '-';
 const none = '';
 const weird = '-';
 const Weird2 = '+';
-const version = '1.0.1';
+const version = '1.0.3';
+const Name = 'Mesa';
 
 
 // bot login 
@@ -40,27 +41,26 @@ client.on('message', message => {
 
 });
 
+
 client.on('message', message => {
-    let args = message.content.substring(none.length).split(" ");
-    switch (args[0]) {
-        case 'hi':
-            message.channel.send('Henwo Comrad!');
-            break;
-        case 'Hi':
-            message.channel.send('Henwo Comrad!');
-            break;
-        case 'HI':
-            message.channel.send('HENWO COMRAD!!!');
-            break;
-        case 'hI':
-            message.channel.send('Henwo Comrad!');
-            break;
+    let botname = Name;
+    let args = message.content.split(" ");
+    let command = args[0].toLowerCase();
+
+    if (args.length > 1 && args[1].toLowerCase() == botname.toLowerCase()) {
+        switch (command) {
+            case 'hi':
+                if (message.content == message.content.toUpperCase()) {
+                    message.channel.send('HENWO COMRAD!!!');
+                } else {
+                    message.channel.send('Henwo Comrad!');
+                }
+                break;
+
+
+        }
     }
-})
-
-
-
-
+});
 
 client.on('message', message => {
     let arg = message.content.substring(prefix.length).split(" ");
