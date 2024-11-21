@@ -1,0 +1,1 @@
+This is a simple bot that I will be editing to make it better for use, and also possibly sending it to a server to run it.
