@@ -53,7 +53,6 @@ const commands = [
     }
 ];
 
-
 // Register slash commands
 const rest = new REST({ version: '10' }).setToken(consts.token);
 
@@ -70,7 +69,6 @@ const rest = new REST({ version: '10' }).setToken(consts.token);
     }
 })();
 
-
 // Log in the bot
 client.login(consts.token);
 
@@ -82,7 +80,53 @@ client.once('ready', () => {
 // Log errors
 client.on('error', console.error);
 
-// Main event listener for commands and interactions
+// Handle slash commands
+client.on('interactionCreate', async (interaction) => {
+    if (!interaction.isCommand()) return;
+
+    const { commandName } = interaction;
+
+    try {
+        if (commandName === 'help') {
+            await interaction.reply('Need assistance? Join our help Discord server: ' + consts.Discord_link);
+        } else if (commandName === 'clear') {
+            // Check permissions
+            if (!interaction.member.permissions.has(PermissionsBitField.Flags.ManageMessages)) {
+                return interaction.reply({ content: 'You do not have permission to use this command.', ephemeral: true });
+            }
+
+            // Get the number of messages to delete
+            const amount = interaction.options.getInteger('amount');
+            if (!amount || amount <= 0 || amount > 100) {
+                return interaction.reply({ content: 'Please specify a number between 1 and 100.', ephemeral: true });
+            }
+
+            // Bulk delete messages
+            const channel = interaction.channel;
+            await channel.bulkDelete(amount, true);
+            await interaction.reply(`Successfully deleted ${amount} messages.`);
+        } else if (commandName === 'version') {
+            await interaction.reply(`The bot version is ${consts.VERSION}`);
+        } else if (commandName === 'discord') {
+            await interaction.reply('Join the bot Discord here: ' + consts.Discord_link);
+        } else if (commandName === 'github') {
+            await interaction.reply('Check out the bot\'s GitHub here: ' + consts.Github_link);
+        } else if (commandName === 'invite') {
+            await interaction.reply('Invite the bot to your server here: ' + consts.Invite_link);
+        } else {
+            await interaction.reply('Unknown command. Please try again.');
+        }
+    } catch (error) {
+        console.error('Error handling interaction:', error);
+        if (interaction.replied || interaction.deferred) {
+            await interaction.followUp({ content: 'An error occurred while executing the command.', ephemeral: true });
+        } else {
+            await interaction.reply({ content: 'An error occurred while executing the command.', ephemeral: true });
+        }
+    }
+});
+
+// Main event listener for prefixed commands and interactions
 client.on('messageCreate', async (message) => {
     try {
         // Ignore bot messages
