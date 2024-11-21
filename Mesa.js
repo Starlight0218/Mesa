@@ -60,7 +60,7 @@ const rest = new REST({ version: '10' }).setToken(consts.token);
     try {
         console.log('Refreshing application (/) commands...');
         await rest.put(
-            Routes.applicationCommands(consts.clientId),
+            Routes.applicationCommands(consts.clientId), // Make sure consts.clientId is set correctly
             { body: commands }
         );
         console.log('Successfully registered application (/) commands.');
@@ -68,6 +68,7 @@ const rest = new REST({ version: '10' }).setToken(consts.token);
         console.error('Error registering application (/) commands:', error);
     }
 })();
+
 
 // Log in the bot
 client.login(consts.token);
