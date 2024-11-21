@@ -1,12 +1,11 @@
 /*
-This discord bot is made and ran by Xylia R. This code is also apart of the bot.
+This discord bot is made and ran by Xylia R. This code is also part of the bot.
 If you copy the code please at least quote me and state where you got it from! Thanks!
 */
 
-
 // Import necessary modules and constants
 const commandHandler = require('./commands/commandHandler.js');
-const { Client, GatewayIntentBits, PermissionsBitField } = require('discord.js');
+const { Client, GatewayIntentBits, PermissionsBitField, REST, Routes } = require('discord.js');
 const consts = require('./allConst.js');
 
 // Create a new Discord client with necessary intents
@@ -17,6 +16,58 @@ const client = new Client({
         GatewayIntentBits.MessageContent // Needed to read message content
     ]
 });
+
+// Define the slash commands
+const commands = [
+    {
+        name: 'help',
+        description: 'Get help with the bot or join the help Discord server.'
+    },
+    {
+        name: 'clear',
+        description: 'Clear a specified number of messages.',
+        options: [
+            {
+                name: 'amount',
+                type: 4, // Integer
+                description: 'The number of messages to delete (1-100).',
+                required: true
+            }
+        ]
+    },
+    {
+        name: 'version',
+        description: 'Check the bot version.'
+    },
+    {
+        name: 'discord',
+        description: 'Get the invite link to the bot\'s Discord help server.'
+    },
+    {
+        name: 'github',
+        description: 'Get the link to the bot\'s GitHub repository.'
+    },
+    {
+        name: 'invite',
+        description: 'Get the link to invite the bot to your server.'
+    }
+];
+
+// Register slash commands
+const rest = new REST({ version: '10' }).setToken(consts.token);
+
+(async () => {
+    try {
+        console.log('Refreshing application (/) commands...');
+        await rest.put(
+            Routes.applicationCommands(consts.clientId),
+            { body: commands }
+        );
+        console.log('Successfully registered application (/) commands.');
+    } catch (error) {
+        console.error('Error registering application (/) commands:', error);
+    }
+})();
 
 // Log in the bot
 client.login(consts.token);
@@ -45,14 +96,14 @@ client.on('messageCreate', async (message) => {
                 await message.channel.send('This discord bot is just a fun one with more commands soon.');
             } else if (command === 'version') {
                 await message.channel.send(consts.VERSION);
-            }else if (command === 'discord'){
-                await message.channel.send('Join the bot discord here:' + consts.Discord_link);
-            } else if (command === 'github'){
-                await message.channel.send('Check out the bot\'s github here:' + consts.Github_link);
-            } else if (command === 'invite'){
+            } else if (command === 'discord') {
+                await message.channel.send('Join the bot Discord here: ' + consts.Discord_link);
+            } else if (command === 'github') {
+                await message.channel.send('Check out the bot\'s GitHub here: ' + consts.Github_link);
+            } else if (command === 'invite') {
                 await message.channel.send('Invite the bot to your server here: ' + consts.Invite_link);
-            }else if(command === 'help'){
-                await message.channel.send('If you are having issues please join our server: ' +consts.Discord_link);
+            } else if (command === 'help') {
+                await message.channel.send('If you are having issues, please join our server: ' + consts.Discord_link);
             } else if (command === 'clear') {
                 // Handle clear command
                 if (!message.member.permissions.has(PermissionsBitField.Flags.ManageMessages)) {
