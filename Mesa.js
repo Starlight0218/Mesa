@@ -1,10 +1,9 @@
-
-
-
-// constants
+// Import necessary modules and constants
 const commandHandler = require('./commands/commandHandler.js');
 const { Client, GatewayIntentBits } = require('discord.js');
 const consts = require('./allConst.js');
+
+// Create a new Discord client with necessary intents
 const client = new Client({
     intents: [
         GatewayIntentBits.Guilds, // Needed for bot functionality in guilds
@@ -13,30 +12,48 @@ const client = new Client({
     ]
 });
 
-// bot login 
+// Log in the bot
 client.login(consts.token);
 
-//console log once the bot is online.
+// Console log once the bot is online
 client.once('ready', () => {
-    console.log('${consts.BOT_NAME} is here!');
+    console.log(`${consts.BOT_NAME} is here!`);
 });
 
-
-//main commands fot the bot
+// Main event listener for commands and interactions
 client.on('messageCreate', message => {
-    if (!message.content.startsWith(consts.PREFIX) || message.author.bot) return;
+    // Ignore bot messages and messages without the prefix
+    if (message.author.bot) return;
+
+    // Check if message starts with the bot's prefix
     if (message.content.startsWith(consts.PREFIX)) {
         const args = message.content.slice(consts.PREFIX.length).split(/ +/);
         const command = args.shift().toLowerCase();
 
-    if (command === 'context') {
-        message.channel.send('Insert here');
-    } else if (command == 'version') {
-        message.channel.send(consts.VERSION);
-    } else if (command) {
-        commandHandeler(message);
+        // Basic command handling
+        if (command === 'context') {
+            message.channel.send('Insert here');
+        } else if (command === 'version') {
+            message.channel.send(consts.VERSION);
+        } else if (command === 'clear') {
+            // Handle 'clear' command
+            const amount = parseInt(args[0], 10);
+            if (!amount || amount <= 0) {
+                return message.reply('Please specify a valid number of messages to delete.');
+            }
+
+            // Attempt to delete messages
+            message.channel.bulkDelete(amount, true).catch(err => {
+                console.error(err);
+                message.channel.send('An error occurred while trying to delete messages.');
+            });
+        } else {
+            // Pass to command handler for other commands
+            commandHandler(message);
+        }
     }
-    }
+
+    // Handle greetings (hi/Hi/HI) mentioning the bot
     const args = message.content.split(' ');
     const command = args[0].toLowerCase();
 
@@ -51,36 +68,3 @@ client.on('messageCreate', message => {
         }
     }
 });
-
-
-
-//function to reply to hi
-client.on('message', message => {
-    let args = message.content.split(" ");
-    let command = args[0].toLowerCase();
-//makes sure that the message is in the correct format and if it has the bot name.
-    if (args.length > 1 && args[1].toLowerCase() == consts.BOT_NAME.toLowerCase()) {
-        switch (command) {
-            case 'hi':
-                //is the message is uppercase
-                if (message.content == message.content.toUpperCase()) {
-                    message.channel.send('HENWO COMRAD!!!');
-                } else {
-                    //defult reply
-                    message.channel.send('Henwo Comrad!');
-                }
-                break;
-        }
-    }
-});
-
-//clear bug report
-client.on('message', message => {
-    let arg = message.content.substring(consts.PREFIX.length).split(" ");
-    switch (arg[0]) {
-        case 'clear':
-            if (!arg[1]) return message.reply('ERROR PLEASE DEFINE CLEAR NUMBER')
-            message.channel.bulkDelete(arg[1]);
-            break;
-    }
-})
