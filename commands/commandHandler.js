@@ -5,14 +5,14 @@ module.exports = (message) => {
 
     switch (command) {
         case 'commands':
-            message.channel.send('Available commands: context, version, help, clear');
+            message.channel.send('Available commands: context, version, help, clear, invite, github, discord');
             break;
 
         default:
             message.channel.send('Unknown command. Type "/help" for a list of commands.');
             break;
         case 'help':
-            message.channel.send('If you are having issues please join our server: ${consts.Invite_link}');
+            message.channel.send('If you are having issues please join our server: ${consts.Discord_link}');
 
     }
 };

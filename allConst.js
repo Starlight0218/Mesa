@@ -2,7 +2,7 @@
 const { token } = require('./config.json');
 const PREFIX = '/';
 const NONE = '';
-const VERSION = '2.1.14';
+const VERSION = '2.2.15';
 const BOT_NAME = 'Mesa';
 const Discord_link = 'https://discord.gg/sZJwk7zcYd';
 const Github_link = 'https://github.com/XyliaRippy/Mee6';
