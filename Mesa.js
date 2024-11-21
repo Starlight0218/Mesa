@@ -1,20 +1,26 @@
+
+
+
+// constants
+const commandHandeler = require('./commands/commandHandeler.js')
 const Discord = require('discord.js');
 const client = new Discord.Client();
-
 const { token } = require('./config.json');
-
-client.login(token);
-
 const prefix = '-';
 const none = '';
 const weird = '-';
 const Weird2 = '+';
 
+// bot login 
+client.login(token);
+
+//console log once the bot is online.
 client.once('ready', () =>{
     console.log('Mesa is here!');
 });
 
 
+//main commands fot the bot
 client.on('message', message =>{
     if(!message.content.startsWith(prefix) || message.author.bot) return;
 
@@ -25,8 +31,8 @@ client.on('message', message =>{
         message.channel.send('Insert here');
     }else if(command == 'version'){
             message.channel.send('I am in version 1.0.0');
-    }else if(command == 'commands'){
-        message.channel.send('Good commands are $Info version, $Context, $clear (number of messages), Replies; hi, and Hi.')
+    }else if(command){
+        commandHandeler(commands);
     }
         
     
