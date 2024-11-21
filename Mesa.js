@@ -2,6 +2,7 @@
 
 
 // constants
+const Discord = require('discord.js');
 const consts = require('./allConst.js');
 const client = new Discord.Client();
 
