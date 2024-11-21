@@ -10,61 +10,63 @@ const prefix = '-';
 const none = '';
 const weird = '-';
 const Weird2 = '+';
+const version = '1.0.1';
+
 
 // bot login 
 client.login(token);
 
 //console log once the bot is online.
-client.once('ready', () =>{
+client.once('ready', () => {
     console.log('Mesa is here!');
 });
 
 
 //main commands fot the bot
-client.on('message', message =>{
-    if(!message.content.startsWith(prefix) || message.author.bot) return;
+client.on('message', message => {
+    if (!message.content.startsWith(prefix) || message.author.bot) return;
 
     const args = message.content.slice(prefix.length).split(/ +/);
     const command = args.shift().toLocaleLowerCase();
 
-    if(command === 'context'){
+    if (command === 'context') {
         message.channel.send('Insert here');
-    }else if(command == 'version'){
-            message.channel.send('I am in version 1.0.0');
-    }else if(command){
+    } else if (command == 'version') {
+        message.channel.send(version);
+    } else if (command) {
         commandHandeler(commands);
     }
-        
-    
+
+
 });
 
-client.on('message', message =>{
-   let args = message.content.substring(none.length).split(" ");
-   switch(args[0]){
-    case 'hi':
-        message.channel.send('Henwo Comrad!');
-        break;
-    case 'Hi':
-        message.channel.send('Henwo Comrad!');
-        break;
-    case 'HI':
-        message.channel.send('HENWO COMRAD!!!');
-        break;
-    case 'hI':
-        message.channel.send('Henwo Comrad!');
-        break;
-   }
+client.on('message', message => {
+    let args = message.content.substring(none.length).split(" ");
+    switch (args[0]) {
+        case 'hi':
+            message.channel.send('Henwo Comrad!');
+            break;
+        case 'Hi':
+            message.channel.send('Henwo Comrad!');
+            break;
+        case 'HI':
+            message.channel.send('HENWO COMRAD!!!');
+            break;
+        case 'hI':
+            message.channel.send('Henwo Comrad!');
+            break;
+    }
 })
 
 
 
 
 
-client.on('message', message=>{
+client.on('message', message => {
     let arg = message.content.substring(prefix.length).split(" ");
-    switch(arg[0]){
+    switch (arg[0]) {
         case 'clear':
-            if(!arg[1]) return message.reply('ERROR PLEASE DEFINE CLEAR NUMBER')
+            if (!arg[1]) return message.reply('ERROR PLEASE DEFINE CLEAR NUMBER')
             message.channel.bulkDelete(arg[1]);
             break;
     }
@@ -77,7 +79,7 @@ client.on('message', message=>{
 // */
 // client.on('message', message=>{
 //     let eat = message.content.substring(weird.length).split(" ");
-//     switch(eat[0]){ 
+//     switch(eat[0]){
 //         case 'EatMe':
 //             if(eat[1] === 'bio'){
 //                 message.channel.send('I enjoy having my flesh torn from my body with blood and bone being revealed and then watching as its consumed while asking how it tastes. I will then proceed to scream from the pain and ask you to eat the rest of me so I can die in painful bliss.');
