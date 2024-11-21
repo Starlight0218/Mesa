@@ -27,7 +27,7 @@ client.on('message', message => {
     } else if (command == 'version') {
         message.channel.send(consts.VERSION);
     } else if (command) {
-        commandHandeler(commands);
+        commandHandeler(message);
     }
 
 
