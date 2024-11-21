@@ -36,7 +36,7 @@ client.on('messageCreate', async (message) => {
 
             // Basic command handling
             if (command === 'context') {
-                await message.channel.send('Insert here');
+                await message.channel.send('Test');
             } else if (command === 'version') {
                 await message.channel.send(consts.VERSION);
             } else {
