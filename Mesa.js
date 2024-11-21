@@ -33,17 +33,19 @@ client.on('message', message => {
 
 });
 
-
+//function to reply to hi
 client.on('message', message => {
     let args = message.content.split(" ");
     let command = args[0].toLowerCase();
-
+//makes sure that the message is in the correct format and if it has the bot name.
     if (args.length > 1 && args[1].toLowerCase() == consts.BOT_NAME.toLowerCase()) {
         switch (command) {
             case 'hi':
+                //is the message is uppercase
                 if (message.content == message.content.toUpperCase()) {
                     message.channel.send('HENWO COMRAD!!!');
                 } else {
+                    //defult reply
                     message.channel.send('Henwo Comrad!');
                 }
                 break;
@@ -51,6 +53,7 @@ client.on('message', message => {
     }
 });
 
+//clear bug report
 client.on('message', message => {
     let arg = message.content.substring(consts.PREFIX.length).split(" ");
     switch (arg[0]) {
@@ -62,7 +65,7 @@ client.on('message', message => {
 })
 
 
-
+//unessisary code
 // /*
 // This is all a bet that i lost twords michael and a promis i made, i hate it, and i'll have to keep this in due to his request!
 // */
