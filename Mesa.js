@@ -53,6 +53,8 @@ const commands = [
     }
 ];
 
+console.log('Client ID:', consts.clientId);
+
 // Register slash commands
 const rest = new REST({ version: '10' }).setToken(consts.token);
 
