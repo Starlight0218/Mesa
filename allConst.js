@@ -9,7 +9,6 @@ const VERSION = '1.0.6';
 const BOT_NAME = 'Mesa';
 
 module.exports = {
-    client,
     PREFIX,
     NONE,
     WEIRD,
