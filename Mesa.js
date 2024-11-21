@@ -1,3 +1,9 @@
+/*
+This discord bot is made and ran by Xylia R. This code is also apart of the bot.
+If you copy the code please at least quote me and state where you got it from! Thanks!
+*/
+
+
 // Import necessary modules and constants
 const commandHandler = require('./commands/commandHandler.js');
 const { Client, GatewayIntentBits, PermissionsBitField } = require('discord.js');
