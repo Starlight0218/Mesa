@@ -2,38 +2,30 @@
 
 
 // constants
-const commandHandeler = require('./commands/commandHandeler.js')
-const Discord = require('discord.js');
+const consts = require('./allConst.js');
 const client = new Discord.Client();
-const { token } = require('./config.json');
-const prefix = '-';
-const none = '';
-const weird = '-';
-const Weird2 = '+';
-const version = '1.0.3';
-const Name = 'Mesa';
 
 
 // bot login 
-client.login(token);
+client.login(consts.token);
 
 //console log once the bot is online.
 client.once('ready', () => {
-    console.log('Mesa is here!');
+    console.log('${consts.BOT_NAME} is here!');
 });
 
 
 //main commands fot the bot
 client.on('message', message => {
-    if (!message.content.startsWith(prefix) || message.author.bot) return;
+    if (!message.content.startsWith(consts.PREFIX) || message.author.bot) return;
 
-    const args = message.content.slice(prefix.length).split(/ +/);
+    const args = message.content.slice(consts.PREFIX.length).split(/ +/);
     const command = args.shift().toLocaleLowerCase();
 
     if (command === 'context') {
         message.channel.send('Insert here');
     } else if (command == 'version') {
-        message.channel.send(version);
+        message.channel.send(consts.VERSION);
     } else if (command) {
         commandHandeler(commands);
     }
@@ -43,11 +35,10 @@ client.on('message', message => {
 
 
 client.on('message', message => {
-    let botname = Name;
     let args = message.content.split(" ");
     let command = args[0].toLowerCase();
 
-    if (args.length > 1 && args[1].toLowerCase() == botname.toLowerCase()) {
+    if (args.length > 1 && args[1].toLowerCase() == consts.BOT_NAME.toLowerCase()) {
         switch (command) {
             case 'hi':
                 if (message.content == message.content.toUpperCase()) {
@@ -56,14 +47,12 @@ client.on('message', message => {
                     message.channel.send('Henwo Comrad!');
                 }
                 break;
-
-
         }
     }
 });
 
 client.on('message', message => {
-    let arg = message.content.substring(prefix.length).split(" ");
+    let arg = message.content.substring(consts.PREFIX.length).split(" ");
     switch (arg[0]) {
         case 'clear':
             if (!arg[1]) return message.reply('ERROR PLEASE DEFINE CLEAR NUMBER')
