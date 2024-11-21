@@ -45,6 +45,8 @@ client.on('messageCreate', async (message) => {
                 await message.channel.send('This discord bot is just a fun one with more commands soon.');
             } else if (command === 'version') {
                 await message.channel.send(consts.VERSION);
+            }else if (command === 'discord'){
+                await message.channel.send('Join the bot discord here: ', consts.Discord_link);
             } else if (command === 'clear') {
                 // Handle clear command
                 if (!message.member.permissions.has(PermissionsBitField.Flags.ManageMessages)) {
