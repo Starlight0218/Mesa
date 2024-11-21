@@ -5,11 +5,11 @@ module.exports = (message) => {
     switch (command) {
         case 'help':
         case 'commands':
-            message.channel.send('Available commands: context, version, help');
+            message.channel.send('Available commands: context, version, help, clear');
             break;
 
         default:
-            message.channel.send('Unknown command. Type "-help" for a list of commands.');
+            message.channel.send('Unknown command. Type "/help" for a list of commands.');
             break;
     }
 };

@@ -1,6 +1,6 @@
 
 const { token } = require('./config.json');
-const PREFIX = '-';
+const PREFIX = '/';
 const NONE = '';
 const WEIRD = '-';
 const WEIRD2 = '+';
