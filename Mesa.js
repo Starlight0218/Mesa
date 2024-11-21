@@ -2,10 +2,16 @@
 
 
 // constants
-const Discord = require('discord.js');
+const commandHandler = require('./commands/commandHandler.js');
+const { Client, GatewayIntentBits } = require('discord.js');
 const consts = require('./allConst.js');
-const client = new Discord.Client();
-
+const client = new Client({
+    intents: [
+        GatewayIntentBits.Guilds, // Needed for bot functionality in guilds
+        GatewayIntentBits.GuildMessages, // Needed to read messages in guilds
+        GatewayIntentBits.MessageContent // Needed to read message content
+    ]
+});
 
 // bot login 
 client.login(consts.token);
@@ -17,11 +23,11 @@ client.once('ready', () => {
 
 
 //main commands fot the bot
-client.on('message', message => {
+client.on('messageCreate', message => {
     if (!message.content.startsWith(consts.PREFIX) || message.author.bot) return;
-
-    const args = message.content.slice(consts.PREFIX.length).split(/ +/);
-    const command = args.shift().toLocaleLowerCase();
+    if (message.content.startsWith(consts.PREFIX)) {
+        const args = message.content.slice(consts.PREFIX.length).split(/ +/);
+        const command = args.shift().toLowerCase();
 
     if (command === 'context') {
         message.channel.send('Insert here');
@@ -30,9 +36,23 @@ client.on('message', message => {
     } else if (command) {
         commandHandeler(message);
     }
+    }
+    const args = message.content.split(' ');
+    const command = args[0].toLowerCase();
 
-
+    if (args.length > 1 && args[1].toLowerCase() === consts.BOT_NAME.toLowerCase()) {
+        if (command === 'hi') {
+            // Respond differently if the message is in uppercase
+            if (message.content === message.content.toUpperCase()) {
+                message.channel.send('HENWO COMRAD!!!');
+            } else {
+                message.channel.send('Henwo Comrad!');
+            }
+        }
+    }
 });
+
+
 
 //function to reply to hi
 client.on('message', message => {
