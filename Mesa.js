@@ -46,7 +46,11 @@ client.on('messageCreate', async (message) => {
             } else if (command === 'version') {
                 await message.channel.send(consts.VERSION);
             }else if (command === 'discord'){
-                await message.channel.send('Join the bot discord here: ', consts.Discord_link);
+                await message.channel.send('Join the bot discord here: ${consts.Discord_link}');
+            } else if (command === 'github'){
+                await message.channel.send('Check out the bot\'s github here: ${consts.Github_link}');
+            } else if (command === 'invite'){
+                await message.channel.send('Invite the bot to your server here: ${consts.Invite_link}');
             } else if (command === 'clear') {
                 // Handle clear command
                 if (!message.member.permissions.has(PermissionsBitField.Flags.ManageMessages)) {
