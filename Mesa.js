@@ -8,6 +8,7 @@ const commandHandler = require('./commands/commandHandler.js');
 const { Client, GatewayIntentBits, PermissionsBitField, REST, Routes } = require('discord.js');
 const consts = require('./allConst.js');
 
+
 // Create a new Discord client with necessary intents
 const client = new Client({
     intents: [
@@ -50,6 +51,14 @@ const commands = [
     {
         name: 'invite',
         description: 'Get the link to invite the bot to your server.'
+    },
+    {
+        name: 'commands',
+        description: 'Gets the lists of commands.'
+    },
+    {
+        name: 'context',
+        description: 'get the context of the bot.'
     }
 ];
 
@@ -87,8 +96,10 @@ client.on('interactionCreate', async (interaction) => {
     const { commandName } = interaction;
 
     try {
-        if (commandName === 'help') {
-            await interaction.reply('Need assistance? Join our help Discord server: ' + consts.Discord_link);
+        if (commandName === 'commands') {
+            await interaction.reply('here are the commands: '+ consts.commands);
+        }else if (commandName === 'help') {
+            await interaction.reply('Need assistance? Join our help Discord server: ' + consts.Discord_link + 'Or use /commands');
         } else if (commandName === 'clear') {
             // Check permissions
             if (!interaction.member.permissions.has(PermissionsBitField.Flags.ManageMessages)) {
@@ -149,7 +160,9 @@ client.on('messageCreate', async (message) => {
             } else if (command === 'invite') {
                 await message.channel.send('Invite the bot to your server here: ' + consts.Invite_link);
             } else if (command === 'help') {
-                await message.channel.send('If you are having issues, please join our server: ' + consts.Discord_link);
+                await message.channel.send('If you are having issues, please join our server: ' + consts.Discord_link + 'Or use /commands');
+            } else if (command === 'commands'){
+                await message.channel.send(commandHandler(message));
             } else if (command === 'clear') {
                 // Handle clear command
                 if (!message.member.permissions.has(PermissionsBitField.Flags.ManageMessages)) {

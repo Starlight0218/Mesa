@@ -1,16 +1,26 @@
+module.exports = (context) => {
+    const isMessage = context.content !== undefined; // Check if it's a message or interaction
+    const command = isMessage
+        ? context.content.slice(1).toLowerCase() // Extract command from message
+        : context.commandName; // Use commandName for slash commands
 
-module.exports = (message) => {
-    console.log('Command received by handler:', message.content); // Log the command
-    const command = message.content.slice(1).toLowerCase();
+    console.log('Command received by handler:', command);
 
     switch (command) {
         case 'commands':
-            message.channel.send('Available commands: context, version, help, clear, invite, github, discord');
+            if (isMessage) {
+                context.channel.send('Available commands: context, version, help, clear, invite, github, discord');
+            } else {
+                context.reply('Available commands: context, version, help, clear, invite, github, discord');
+            }
             break;
 
         default:
-            message.channel.send('Unknown command. Type "/help" for a list of commands.');
+            if (isMessage) {
+                context.channel.send('Unknown command. Type "/help" for a list of commands.');
+            } else {
+                context.reply('Unknown command. Type "/help" for a list of commands.');
+            }
             break;
-        
     }
 };
