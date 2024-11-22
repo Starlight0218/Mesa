@@ -58,7 +58,7 @@ const commands = [
     },
     {
         name: 'context',
-        description: 'get the context of the bot.'
+        description: 'Gets the context of mesa.'
     }
 ];
 
@@ -122,7 +122,9 @@ client.on('interactionCreate', async (interaction) => {
             await interaction.reply('Join the bot Discord here: ' + consts.Discord_link);
         } else if (commandName === 'github') {
             await interaction.reply('Check out the bot\'s GitHub here: ' + consts.Github_link);
-        } else if (commandName === 'invite') {
+        } else if (commandName === 'context'){
+            await interaction.reply('This discord bot is just a fun one with more commands soon.');
+        }else if (commandName === 'invite') {
             await interaction.reply('Invite the bot to your server here: ' + consts.Invite_link);
         } else {
             await interaction.reply('Unknown command. Please try again.');
