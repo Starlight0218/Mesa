@@ -7,7 +7,7 @@ If you copy the code please at least quote me and state where you got it from! T
 const commandHandler = require('./commands/commandHandler.js');
 const { Client, GatewayIntentBits, PermissionsBitField, REST, Routes } = require('discord.js');
 const consts = require('./allConst.js');
-
+const { AttachmentBuilder, EmbedBuilder } = require('discord.js');
 
 // Create a new Discord client with necessary intents
 const client = new Client({
@@ -59,6 +59,10 @@ const commands = [
     {
         name: 'context',
         description: 'Gets the context of mesa.'
+    },
+    {
+        name: 'donate',
+        description: 'Get the link to the bot\'s donation page.'
     }
 ];
 
@@ -126,7 +130,9 @@ client.on('interactionCreate', async (interaction) => {
             await interaction.reply('This discord bot is just a fun one with more commands soon.');
         }else if (commandName === 'invite') {
             await interaction.reply('Invite the bot to your server here: ' + consts.Invite_link);
-        } else {
+        }else if(commandName === 'donate') {
+            await interaction.reply('Currently unavailabe');
+        }else {
             await interaction.reply('Unknown command. Please try again.');
         }
     } catch (error) {
@@ -155,6 +161,8 @@ client.on('messageCreate', async (message) => {
                 await message.channel.send('This discord bot is just a fun one with more commands soon.');
             } else if (command === 'version') {
                 await message.channel.send(consts.VERSION);
+            } else if(command === 'donate') {
+                await message.channel.send('Currently unavailabe');
             } else if (command === 'discord') {
                 await message.channel.send('Join the bot Discord here: ' + consts.Discord_link);
             } else if (command === 'github') {
@@ -190,18 +198,20 @@ client.on('messageCreate', async (message) => {
         }
 
         // Handle greetings (hi/Hi/HI and hi Mesa)
-        const words = message.content.split(' ');
-        const firstWord = words[0].toLowerCase();
+        const cleanedMessage = message.content.trim().toLowerCase().replace(/[^\w\s]/g, '');
+        const words = cleanedMessage.split(' ');
+        const indexOfHi = words.indexOf('hi');
 
-        if (firstWord === 'hi') {
-            // If the bot is mentioned (e.g., "hi Mesa")
-            if (words.length > 1 && words[1].toLowerCase() === consts.BOT_NAME.toLowerCase()) {
+        if (indexOfHi !== -1) {
+            // If the bot is mentioned (e.g., "hi @mesa (bot)")
+            if (words.length > indexOfHi + 1 && words[indexOfHi + 1] === consts.BOT_ID.toLowerCase()) {
                 if (message.content === message.content.toUpperCase()) {
                     await message.channel.send('HENWO COMRAD!!!');
                 } else {
                     await message.channel.send('Henwo Comrad!');
                 }
-            } else if (words.length === 1) {
+            } else if (indexOfHi + 1 === words.length) {
+
                 // Handle plain "hi"
                 await message.channel.send('Henwo!');
             }
