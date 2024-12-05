@@ -1,8 +1,8 @@
 
-const { clientId, token, aiKey } = require('./config.json');
+const { clientId, token, aiKey, unlimited } = require('./config.json');
 const PREFIX = '/';
 const NONE = '';
-const VERSION = '2.4.0';
+const VERSION = '2.4.10';
 const BOT_NAME = 'Mesa';
 const Discord_link = 'https://discord.gg/sZJwk7zcYd';
 const Github_link = 'https://github.com/XyliaRippy/Mee6';
@@ -21,5 +21,7 @@ module.exports = {
     Github_link,
     Invite_link,
     clientId,
+    aiKey,
+    unlimited,
     commands
 }

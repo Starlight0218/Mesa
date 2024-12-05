@@ -7,8 +7,14 @@ If you copy the code please at least quote me and state where you got it from! T
 const commandHandler = require('./commands/commandHandler.js');
 const { Client, GatewayIntentBits, PermissionsBitField, REST, Routes } = require('discord.js');
 const consts = require('./allConst.js');
+const { getAIResponse } = require('./ai.js');
 const { AttachmentBuilder, EmbedBuilder } = require('discord.js');
+// In-memory usage tracking (can be replaced with a database for persistence)
+let dailyUsage = {};
+const dailyLimit = 5; // Limit for non-"unlimited" users (5 uses per day)
 
+// Define the "unlimited" role name (or role ID)
+const unlimited = consts.unlimited; // This role will have unlimited access 
 // Create a new Discord client with necessary intents
 const client = new Client({
     intents: [
@@ -17,6 +23,40 @@ const client = new Client({
         GatewayIntentBits.MessageContent // Needed to read message content
     ]
 });
+
+
+// Check usage function
+async function checkUsage(message, userId) {
+    // Check if the user has the unlimited role
+    if (message.member.roles.cache.some(role => role.id === unlimited)) {
+      return true;  // Unlimited access for users with the correct role
+    }
+  
+    // Otherwise, check the daily usage limit for other users
+    if (!dailyUsage[userId]) {
+      dailyUsage[userId] = {
+        count: 0,
+        lastReset: new Date().toISOString().split('T')[0] // Track the last reset date
+      };
+    }
+  
+    // Check if we need to reset the usage count for the day
+    const today = new Date().toISOString().split('T')[0]; // Get today's date
+    if (dailyUsage[userId].lastReset !== today) {
+      // Reset the count for the new day
+      dailyUsage[userId].count = 0;
+      dailyUsage[userId].lastReset = today;
+    }
+  
+    // Check if the user has exceeded the daily limit
+    if (dailyUsage[userId].count >= dailyLimit) {
+      return false;  // Limit exceeded
+    }
+  
+    // Otherwise, they can use the AI, so increase their usage count
+    dailyUsage[userId].count += 1;
+    return true;
+  }
 
 // Define the slash commands
 const commands = [
@@ -135,6 +175,7 @@ client.on('interactionCreate', async (interaction) => {
         }else {
             await interaction.reply('Unknown command. Please try again.');
         }
+         
     } catch (error) {
         console.error('Error handling interaction:', error);
         if (interaction.replied || interaction.deferred) {
@@ -190,32 +231,54 @@ client.on('messageCreate', async (message) => {
                 });
 
                 await message.channel.send(`Successfully deleted ${amount} messages.`);
-            } else {
+        } else {
                 // Pass to external command handler
                 commandHandler(message);
             }
             return; // Exit after handling commands
         }
+        
+            // Define the role that can access the AI response (using the "unlimited" constant)
+            if (message.mentions.has(client.user)) {
+                const userId = message.author.id;
+        
+                // Check usage based on role and limit
+                const hasAccess = await checkUsage(message, userId);
+        
+                if (!hasAccess) {
+                return message.reply("You have exceeded your daily limit for using the AI.");
+                }
+        
+                // The entire message will be sent as a prompt to AI
+                const prompt = message.content;  
+        
+                try {
+                const aiResponse = await getAIResponse(prompt);  // Get AI response
+                await message.channel.send(aiResponse);  // Send AI response
+                } catch (error) {
+                console.error('Error fetching AI response:', error);
+                await message.channel.send('Sorry, I could not generate a response right now.');
+                }
+            }
 
         // Handle greetings (hi/Hi/HI and hi Mesa)
-        const cleanedMessage = message.content.trim().toLowerCase().replace(/[^\w\s]/g, '');
-        const words = cleanedMessage.split(' ');
-        const indexOfHi = words.indexOf('hi');
+      
+        // const indexOfHi = words.indexOf('hi');
 
-        if (indexOfHi !== -1) {
-            // If the bot is mentioned (e.g., "hi @mesa (bot)")
-            if (words.length > indexOfHi + 1 && words[indexOfHi + 1] === consts.BOT_ID.toLowerCase()) {
-                if (message.content === message.content.toUpperCase()) {
-                    await message.channel.send('HENWO COMRAD!!!');
-                } else {
-                    await message.channel.send('Henwo Comrad!');
-                }
-            } else if (indexOfHi + 1 === words.length) {
+        // if (indexOfHi !== -1) {
+        //     // If the bot is mentioned (e.g., "hi @mesa (bot)")
+        //     if (words.length > indexOfHi + 1 && words[indexOfHi + 1] === consts.BOT_ID.toLowerCase()) {
+        //         if (message.content === message.content.toUpperCase()) {
+        //             await message.channel.send('HENWO COMRAD!!!');
+        //         } else {
+        //             await message.channel.send('Henwo Comrad!');
+        //         }
+        //     } else if (indexOfHi + 1 === words.length) {
 
-                // Handle plain "hi"
-                await message.channel.send('Henwo!');
-            }
-        }
+        //         // Handle plain "hi"
+        //         await message.channel.send('Henwo!');
+        //     }
+        // }
     } catch (err) {
         console.error('Error handling message:', err);
     }
