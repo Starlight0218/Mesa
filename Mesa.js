@@ -298,25 +298,6 @@ client.on('messageCreate', async (message) => {
             }
         }        
         
-        
-        // Handle greetings (hi/Hi/HI and hi Mesa)
-      
-        // const indexOfHi = words.indexOf('hi');
-
-        // if (indexOfHi !== -1) {
-        //     // If the bot is mentioned (e.g., "hi @mesa (bot)")
-        //     if (words.length > indexOfHi + 1 && words[indexOfHi + 1] === consts.BOT_ID.toLowerCase()) {
-        //         if (message.content === message.content.toUpperCase()) {
-        //             await message.channel.send('HENWO COMRAD!!!');
-        //         } else {
-        //             await message.channel.send('Henwo Comrad!');
-        //         }
-        //     } else if (indexOfHi + 1 === words.length) {
-
-        //         // Handle plain "hi"
-        //         await message.channel.send('Henwo!');
-        //     }
-        // }
     } catch (err) {
         console.error('Error handling message:', err);
     }
