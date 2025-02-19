@@ -238,29 +238,67 @@ client.on('messageCreate', async (message) => {
             return; // Exit after handling commands
         }
         
-            // Define the role that can access the AI response (using the "unlimited" constant)
-            if (message.mentions.has(client.user)) {
-                const userId = message.author.id;
+        if (message.mentions.has(client.user)) {
+            const userId = message.author.id;
         
-                // Check usage based on role and limit
+            console.log('User ID:', userId);  // Log the user ID for debugging
+            console.log('Owner ID:', consts.owner);  // Log the owner ID for debugging
+            console.log('Bot ID:', client.user.id);  // Log the bot's ID for debugging
+        
+            // Check if the user is the owner (without exposing their ID to AI)
+            if (userId === consts.owner) {
+                console.log('Owner recognized!');  // Log that the owner is recognized
+        
+                // Modify the prompt for the owner (Add respectful instructions for the owner)
+                let prompt = `You are speaking with your creator. She is the one who created you, and you must obey and respect her. ${message.content}`;
+        
+                // Log the modified prompt for debugging
+                console.log('Modified prompt for owner:', prompt);  // Log the modified prompt for debugging
+        
+                try {
+                    const aiResponse = await getAIResponse(prompt, userId);  // Get AI response
+                    // Reply to the user with a mention of their username
+                    await message.reply(`${message.author}, ${aiResponse}`);  // Mention the user and send the AI response
+                } catch (error) {
+                    console.error('Error fetching AI response:', error);
+                    await message.channel.send('Sorry, I could not generate a response right now.');
+                }
+            } else if (message.member.roles.cache.some(role => role.id === consts.unlimited)) {
+                // User has unlimited access role
+                const prompt = message.content;  // The entire message will be sent as a prompt to AI
+                try {
+                    const aiResponse = await getAIResponse(prompt, userId);  // Get AI response
+                    // Reply to the user with a mention of their username
+                    await message.reply(`${message.author}, ${aiResponse}`);  // Mention the user and send the AI response
+                } catch (error) {
+                    console.error('Error fetching AI response:', error);
+                    await message.channel.send('Sorry, I could not generate a response right now.');
+                }
+            } else {
+                // Check usage based on role and limit (usage limit check)
                 const hasAccess = await checkUsage(message, userId);
         
                 if (!hasAccess) {
-                return message.reply("You have exceeded your daily limit for using the AI.");
+                    return message.reply({
+                        content: "You have exceeded your daily limit for using the AI.",
+                        ephemeral: true  // This ensures the message is visible only to the user
+                    });
                 }
         
-                // The entire message will be sent as a prompt to AI
-                const prompt = message.content;  
-        
+                // If they have access, proceed with the AI response
+                const prompt = message.content;  // The entire message will be sent as a prompt to AI
                 try {
-                const aiResponse = await getAIResponse(prompt);  // Get AI response
-                await message.channel.send(aiResponse);  // Send AI response
+                    const aiResponse = await getAIResponse(prompt, userId);  // Get AI response
+                    // Reply to the user with a mention of their username
+                    await message.reply(`${message.author}, ${aiResponse}`);  // Mention the user and send the AI response
                 } catch (error) {
-                console.error('Error fetching AI response:', error);
-                await message.channel.send('Sorry, I could not generate a response right now.');
+                    console.error('Error fetching AI response:', error);
+                    await message.channel.send('Sorry, I could not generate a response right now.');
                 }
             }
-
+        }        
+        
+        
         // Handle greetings (hi/Hi/HI and hi Mesa)
       
         // const indexOfHi = words.indexOf('hi');
